@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techtutorin.com - Educational Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .page {
+            display: none;
+        }
+        .active-page {
+            display: block;
+        }
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #4f46e5;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .subject-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .subject-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        }
+        .bg-gradient-tertiary {
+            background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+        }
+        .bg-gradient-quaternary {
+            background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+        }
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+        }
+        .answer-toolbar button {
+            transition: all 0.2s ease;
+        }
+        .answer-toolbar button:hover {
+            background-color: #f3f4f6;
+        }
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .file-upload-area:hover {
+            border-color: #6366f1;
+            background-color: #f9fafb;
+        }
+        .chat-message {
+            transition: transform 0.2s ease;
+        }
+        .chat-message:hover {
+            transform: translateX(5px);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .shadow-card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @media print {
+            body {
+                width: 100%;
+                height: auto;
+            }
+            .page {
+                display: block;
+                page-break-after: always;
+                margin-bottom: 60px;
+            }
+            .hide-in-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation bar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 hide-in-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <button onclick="changePage('main')" class="font-bold text-2xl text-indigo-600">
+                            Tech<span class="text-gray-800">tutorin</span>
+                        </button>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <button onclick="changePage('main')" class="nav-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Home
+                        </button>
+                        <button onclick="changePage('login')" class="nav-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Login/Register
+                        </button>
+                        <button onclick="changePage('admin-dashboard')" class="nav-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Admin Dashboard
+                        </button>
+                        <button onclick="changePage('tutor-dashboard')" class="nav-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Tutor Dashboard
+                        </button>
+                        <button onclick="changePage('student-dashboard')" class="nav-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Student Dashboard
+                        </button>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Get Started
+                    </button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Page -->
+    <div id="main-page" class="page active-page">
+        <!-- Hero Section -->
+        <div class="bg-gradient-primary text-white py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+                            Expert Online Tutoring for Academic Success
+                        </h1>
+                        <p class="mt-4 text-lg md:text-xl">
+                            Get help with homework, projects, and exam preparation in Math, Physics, Electronics, Programming, and more.
+                        </p>
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <button onclick="changePage('login')" class="bg-white text-indigo-600 hover:bg-gray-100 px-5 py-3 rounded-md text-base font-medium">
+                                Join as Student
+                            </button>
+                            <button onclick="changePage('login')" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-indigo-600 px-5 py-3 rounded-md text-base font-medium">
+                                Become a Tutor
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="bg-white rounded-lg shadow-xl p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <div class="text-sm text-gray-500">Live Tutoring Session</div>
+                            </div>
+                            <div class="rounded-md bg-gray-100 p-4 mb-4">
+                                <div class="text-sm font-semibold text-gray-800">Problem:</div>
+                                <div class="text-gray-700 mt-1">Solve the differential equation: dy/dx + 2y = x^2e^(-2x)</div>
+                            </div>
+                            <div class="rounded-md bg-indigo-50 p-4">
+                                <div class="text-sm font-semibold text-indigo-800">Solution:</div>
+                                <div class="text-gray-700 mt-1">We use the integrating factor method...</div>
+                                <div class="mt-2 text-gray-700">The general solution is y = e^(-2x)(∫x^2e^(-2x)·e^(2x)dx + C)</div>
+                                <div class="mt-2 text-gray-700">Which simplifies to y = (x^2/4 - x/2 + 3/4)e^(-2x) + Ce^(-2x)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Why Choose Techtutorin?
+                    </h2>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                        Our platform connects students with expert tutors for personalized learning experiences.
+                    </p>
+                </div>
+
+                <div class="mt-12">
+                    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <div class="pt-6 shadow-card rounded-lg bg-white">
+                            <div class="flow-root bg-gray-50 rounded-t-lg px-6 pb-8">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span class="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                                            <i class="fas fa-users text-white text-xl"></i>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Expert Tutors</h3>
+                                    <p class="mt-5 text-base text-gray-500">
+                                        Our tutors are professionals with deep knowledge in their fields, ready to help you understand complex concepts.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 shadow-card rounded-lg bg-white">
+                            <div class="flow-root bg-gray-50 rounded-t-lg px-6 pb-8">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span class="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                                            <i class="fas fa-clock text-white text-xl"></i>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Flexible Schedule</h3>
+                                    <p class="mt-5 text-base text-gray-500">
+                                        Get help when you need it with our 24/7 platform. Post questions anytime and receive timely responses.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 shadow-card rounded-lg bg-white">
+                            <div class="flow-root bg-gray-50 rounded-t-lg px-6 pb-8">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span class="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                                            <i class="fas fa-tools text-white text-xl"></i>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-medium text-gray-900 tracking-tight">Interactive Tools</h3>
+                                    <p class="mt-5 text-base text-gray-500">
+                                        Our platform provides interactive tools for solving problems, sharing files, and communicating effectively.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects Section -->
+        <div class="py-12 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Subjects We Cover
+                    </h2>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                        Get help with a wide range of technical and academic subjects
+                    </p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="subject-card group relative bg-white rounded-lg overflow-hidden shadow">
+                        <div class="bg-gradient-primary h-24 w-full flex items-center justify-center">
+                            <i class="fas fa-square-root-alt text-white text-5xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-base font-semibold text-gray-900">Mathematics</h3>
+                            <p class="mt-2 text-sm text-gray-500">Algebra, Calculus, Statistics, Geometry, Trigonometry</p>
+                        </div>
+                    </div>
+
+                    <div class="subject-card group relative bg-white rounded-lg overflow-hidden shadow">
+                        <div class="bg-gradient-secondary h-24 w-full flex items-center justify-center">
+                            <i class="fas fa-atom text-white text-5xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-base font-semibold text-gray-900">Physics</h3>
+                            <p class="mt-2 text-sm text-gray-500">Mechanics, Electromagnetism, Thermodynamics, Quantum Physics</p>
+                        </div>
+                    </div>
+
+                    <div class="subject-card group relative bg-white rounded-lg overflow-hidden shadow">
+                        <div class="bg-gradient-tertiary h-24 w-full flex items-center justify-center">
+                            <i class="fas fa-microchip text-white text-5xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-base font-semibold text-gray-900">Electronics</h3>
+                            <p class="mt-2 text-sm text-gray-500">Circuit Theory, Digital Logic, Signal Processing, Control Systems</p>
+                        </div>
+                    </div>
+
+                    <div class="subject-card group relative bg-white rounded-lg overflow-hidden shadow">
+                        <div class="bg-gradient-quaternary h-24 w-full flex items-center justify-center">
+                            <i class="fas fa-code text-white text-5xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-base font-semibold text-gray-900">Programming</h3>
+                            <p class="mt-2 text-sm text-gray-500">C/C++, Java, Python, Data Structures, Algorithms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        What Our Students Say
+                    </h2>
+                </div>
+                <div class="mt-12 grid gap-8 md:grid-cols-3">
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <span class="text-xl font-bold text-gray-600">S</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Sarah K.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"The tutors at Techtutorin helped me understand complex calculus problems. Their step-by-step explanations were clear and concise."</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <span class="text-xl font-bold text-gray-600">M</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Michael R.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"I was struggling with my programming assignment until I found Techtutorin. The interactive tools and expert guidance made all the difference!"</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <span class="text-xl font-bold text-gray-600">A</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Aisha P.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"The circuit theory tutorials on Techtutorin helped me ace my electronics exam. The visual explanations made complex concepts easy to understand."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="bg-gradient-dark text-white">
+            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                    <span class="block">Ready to get started?</span>
+                    <span class="block text-indigo-300">Join Techtutorin today.</span>
+                </h2>
+                <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                    <div class="inline-flex rounded-md shadow">
+                        <button onclick="changePage('login')" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50">
+                            Register Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Techtutorin</h3>
+                        <p class="text-gray-400">Your platform for academic success in technical subjects.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white">Home</a></li>
+                            <li><a href="#" class="hover:text-white">About Us</a></li>
+                            <li><a href="#" class="hover:text-white">Subjects</a></li>
+                            <li><a href="#" class="hover:text-white">Become a Tutor</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Support</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white">FAQs</a></li>
+                            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                        <div class="flex space-x-4 text-gray-400">
+                            <a href="#" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="text-sm font-semibold mb-2">Subscribe to our newsletter</h4>
+                            <div class="flex">
+                                <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l-md focus:outline-none text-gray-900">
+                                <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-r-md">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                    <p>© 2023 Techtutorin. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Login/Register Page -->
+    <div id="login-page" class="page">
+        <div class="min-h-screen flex flex-col justify-center bg-gray-50 py-12 sm:px-6 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-md">
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    <span id="auth-title">Sign in to your account</span>
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    <span id="auth-subtitle">Or <button onclick="toggleAuthMode()" class="font-medium text-indigo-600 hover:text-indigo-500">create a new account</button></span>
+                </p>
+            </div>
+
+            <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                    <!-- Login Form -->
+                    <div id="login-form">
+                        <form class="space-y-6" action="#" method="POST">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">
+                                    Email address
+                                </label>
+                                <div class="mt-1">
+                                    <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700">
+                                    Password
+                                </label>
+                                <div class="mt-1">
+                                    <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                        Remember me
+                                    </label>
+                                </div>
+
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                        Forgot your password?
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="button" onclick="simulateLogin()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Sign in
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="mt-6">
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-gray-300"></div>
+                                </div>
+                                <div class="relative flex justify-center text-sm">
+                                    <span class="px-2 bg-white text-gray-500">
+                                        Or continue with
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 grid grid-cols-3 gap-3">
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <i class="fab fa-google"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="register-form" class="hidden">
+                        <form class="space-y-6" action="#" method="POST">
+                            <div>
+                                <label for="reg-name" class="block text-sm font-medium text-gray-700">
+                                    Full Name
+                                </label>
+                                <div class="mt-1">
+                                    <input id="reg-name" name="name" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="reg-email" class="block text-sm font-medium text-gray-700">
+                                    Email address
+                                </label>
+                                <div class="mt-1">
+                                    <input id="reg-email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="reg-password" class="block text-sm font-medium text-gray-700">
+                                    Password
+                                </label>
+                                <div class="mt-1">
+                                    <input id="reg-password" name="password" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700">
+                                    Confirm Password
+                                </label>
+                                <div class="mt-1">
+                                    <input id="reg-confirm-password" name="confirm-password" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="user-type" class="block text-sm font-medium text-gray-700">
+                                    I want to join as
+                                </label>
+                                <div class="mt-1">
+                                    <select id="user-type" name="user-type" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <option value="student">Student</option>
+                                        <option value="tutor">Tutor</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                <label for="terms" class="ml-2 block text-sm text-gray-900">
+                                    I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms of Service</a> and <a href="#" class="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <div>
+                                <button type="button" onclick="simulateRegister()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Register
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard-page" class="page">
+        <div class="min-h-screen bg-gray-100">
+            <div class="flex">
+                <!-- Sidebar -->
+                <div class="w-64 bg-indigo-800 text-white min-h-screen">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xl">Admin Panel</span>
+                            <button class="md:hidden text-white focus:outline-none">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="mt-8 flex flex-col space-y-1">
+                            <a href="#admin-dashboard" class="flex items-center py-2 px-4 bg-indigo-900 rounded">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#admin-users" class="flex items-center py-2 px-4 hover:bg-indigo-700 rounded">
+                                <i class="fas fa-users mr-3"></i>
+                                <span>Users</span>
+                            </a>
+                            <a href="#admin-files" class="flex items-center py-2 px-4 hover:bg-indigo-700 rounded">
+                                <i class="fas fa-file-pdf mr-3"></i>
+                                <span>Files</span>
+                            </a>
+                            <a href="#admin-questions" class="flex items-center py-2 px-4 hover:bg-indigo-700 rounded">
+                                <i class="fas fa-question-circle mr-3"></i>
+                                <span>Questions</span>
+                            </a>
+                            <a href="#admin-reports" class="flex items-center py-2 px-4 hover:bg-indigo-700 rounded">
+                                <i class="fas fa-chart-bar mr-3"></i>
+                                <span>Reports</span>
+                            </a>
+                            <a href="#admin-settings" class="flex items-center py-2 px-4 hover:bg-indigo-700 rounded">
+                                <i class="fas fa-cog mr-3"></i>
+                                <span>Settings</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1 overflow-auto">
+                    <div class="bg-white shadow">
+                        <div class="px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+                            <div class="flex items-center">
+                                <div class="relative">
+                                    <button class="flex items-center text-gray-500 mr-4">
+                                        <i class="fas fa-bell text-xl"></i>
+                                        <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">3</span>
+                                    </button>
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="Profile" class="h-8 w-8 rounded-full mr-2">
+                                    <span class="text-gray-900">Admin User</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="py-6">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <!-- Overview Cards -->
+                            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                                <i class="fas fa-users text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Total Users
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            842
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                                <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Active Tutors
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            156
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                                <i class="fas fa-question-circle text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Active Questions
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            47
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                                <i class="fas fa-file-pdf text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Uploaded Files
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            312
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- User Management -->
+                            <div class="mt-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-900">User Management</h2>
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                        Add New User
+                                    </button>
+                                </div>
+                                <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                                    <ul class="divide-y divide-gray-200">
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="h-12 w-12 rounded-full" src="https://via.placeholder.com/150" alt="">
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Jane Cooper</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">jane.cooper@example.com</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                                    Tutor
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="h-12 w-12 rounded-full" src="https://via.placeholder.com/150" alt="">
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Michael Smith</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">michael.smith@example.com</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                                    Student
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="h-12 w-12 rounded-full" src="https://via.placeholder.com/150" alt="">
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Robert Johnson</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">robert.johnson@example.com</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                                    Tutor
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                                    <div class="flex-1 flex justify-between sm:hidden">
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                            Previous
+                                        </a>
+                                        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                            Next
+                                        </a>
+                                    </div>
+                                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-700">
+                                                Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">97</span> results
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                    <span class="sr-only">Previous</span>
+                                                    <i class="fas fa-chevron-left"></i>
+                                                </a>
+                                                <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                                    1
+                                                </a>
+                                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                                    2
+                                                </a>
+                                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                                    3
+                                                </a>
+                                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                                    ...
+                                                </span>
+                                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                                    10
+                                                </a>
+                                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                    <span class="sr-only">Next</span>
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </a>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- File Management -->
+                            <div class="mt-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-900">File Management</h2>
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                        Upload New File
+                                    </button>
+                                </div>
+                                <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                                    <ul class="divide-y divide-gray-200">
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0 text-indigo-600">
+                                                        <i class="fas fa-file-pdf text-3xl"></i>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Calculus_Notes.pdf</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">2.3 MB · Uploaded by Jane Cooper</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                                    Mathematics
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0 text-indigo-600">
+                                                        <i class="fas fa-file-pdf text-3xl"></i>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Digital_Logic_Design.pdf</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">3.7 MB · Uploaded by Robert Johnson</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                                    Electronics
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center px-4 py-4 sm:px-6">
+                                                <div class="min-w-0 flex-1 flex items-center">
+                                                    <div class="flex-shrink-0 text-indigo-600">
+                                                        <i class="fas fa-file-pdf text-3xl"></i>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1 px-4">
+                                                        <div>
+                                                            <p class="text-sm font-medium text-indigo-600 truncate">Python_Programming_Guide.pdf</p>
+                                                            <p class="mt-1 flex items-center text-sm text-gray-500">
+                                                                <span class="truncate">5.1 MB · Uploaded by Admin</span>
+                                                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                                    Programming
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="text-gray-400 hover:text-gray-500">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                    <button class="text-red-400 hover:text-red-500">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Area -->
+                            <div class="mt-8">
+                                <div class="bg-white shadow sm:rounded-lg">
+                                    <div class="px-4 py-5 sm:p-6">
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                            Upload PDF
+                                        </h3>
+                                        <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                            <p>
+                                                Upload new PDF files for students and tutors. Maximum file size: 10 MB.
+                                            </p>
+                                        </div>
+                                        <div class="mt-5">
+                                            <div class="file-upload-area flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                                <div class="space-y-1 text-center">
+                                                    <i class="fas fa-cloud-upload-alt mx-auto text-gray-400 text-3xl"></i>
+                                                    <div class="flex text-sm text-gray-600">
+                                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                            <span>Upload a file</span>
+                                                            <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                                        </label>
+                                                        <p class="pl-1">or drag and drop</p>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500">
+                                                        PDF up to 10MB
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4">
+                                                <div>
+                                                    <label for="file-category" class="block text-sm font-medium text-gray-700">Category</label>
+                                                    <select id="file-category" name="file-category" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                        <option>Mathematics</option>
+                                                        <option>Physics</option>
+                                                        <option>Electronics</option>
+                                                        <option>Programming</option>
+                                                        <option>Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <label for="file-description" class="block text-sm font-medium text-gray-700">Description</label>
+                                                    <textarea id="file-description" name="file-description" rows="3" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Brief description of the file"></textarea>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                <i class="fas fa-upload mr-2"></i>
+                                                Upload File
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutor Dashboard -->
+    <div id="tutor-dashboard-page" class="page">
+        <div class="min-h-screen bg-gray-100">
+            <div class="flex">
+                <!-- Sidebar -->
+                <div class="w-64 bg-green-800 text-white min-h-screen">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xl">Tutor Panel</span>
+                            <button class="md:hidden text-white focus:outline-none">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="mt-8 flex flex-col space-y-1">
+                            <a href="#tutor-dashboard" class="flex items-center py-2 px-4 bg-green-900 rounded">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#tutor-questions" class="flex items-center py-2 px-4 hover:bg-green-700 rounded">
+                                <i class="fas fa-question-circle mr-3"></i>
+                                <span>Questions</span>
+                            </a>
+                            <a href="#tutor-answers" class="flex items-center py-2 px-4 hover:bg-green-700 rounded">
+                                <i class="fas fa-comment-dots mr-3"></i>
+                                <span>My Answers</span>
+                            </a>
+                            <a href="#tutor-materials" class="flex items-center py-2 px-4 hover:bg-green-700 rounded">
+                                <i class="fas fa-book mr-3"></i>
+                                <span>Materials</span>
+                            </a>
+                            <a href="#tutor-earnings" class="flex items-center py-2 px-4 hover:bg-green-700 rounded">
+                                <i class="fas fa-dollar-sign mr-3"></i>
+                                <span>Earnings</span>
+                            </a>
+                            <a href="#tutor-profile" class="flex items-center py-2 px-4 hover:bg-green-700 rounded">
+                                <i class="fas fa-user mr-3"></i>
+                                <span>Profile</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1 overflow-auto">
+                    <div class="bg-white shadow">
+                        <div class="px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <h1 class="text-2xl font-semibold text-gray-900">Tutor Dashboard</h1>
+                            <div class="flex items-center">
+                                <div class="relative">
+                                    <button class="flex items-center text-gray-500 mr-4">
+                                        <i class="fas fa-bell text-xl"></i>
+                                        <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">5</span>
+                                    </button>
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="Profile" class="h-8 w-8 rounded-full mr-2">
+                                    <span class="text-gray-900">Dr. Jane Cooper</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="py-6">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <!-- Overview Cards -->
+                            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                                <i class="fas fa-question-circle text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        New Questions
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            12
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                                <i class="fas fa-comment-dots text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Answers Provided
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            167
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                                <i class="fas fa-star text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Rating
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            4.9/5
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                                                View feedback
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                                <i class="fas fa-dollar-sign text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Monthly Earnings
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            $1,254
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                                                View details
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Questions -->
+                            <div class="mt-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-900">Pending Questions</h2>
+                                    <div class="flex gap-2">
+                                        <select class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+                                            <option>All Subjects</option>
+                                            <option>Mathematics</option>
+                                            <option>Physics</option>
+                                            <option>Electronics</option>
+                                            <option>Programming</option>
+                                        </select>
+                                        <select class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+                                            <option>All Time</option>
+                                            <option>Today</option>
+                                            <option>This Week</option>
+                                            <option>This Month</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                                    <ul class="divide-y divide-gray-200">
+                                        <li>
+                                            <div class="px-4 py-4 sm:px-6">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex-1">
+                                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                            How to solve this differential equation: dy/dx + 2y = x^2e^(-2x)?
+                                                        </h3>
+                                                        <div class="mt-2 flex justify-between sm:flex sm:justify-start">
+                                                            <div class="sm:flex">
+                                                                <p class="flex items-center text-sm text-gray-500">
+                                                                    <i class="fas fa-user-circle mr-1.5 text-gray-400"></i>
+                                                                    Michael Smith
+                                                                </p>
+                                                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                                    <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                                                                    Mathematics
+                                                                </p>
+                                                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                                    <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                                                                    Posted 2 hours ago
+                                                                </p>
+                                                            </div>
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                                Waiting for answer
+                                                            </span>
+                                                        </div>
+                                                        <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                                                            <p class="text-sm text-gray-700">
+                                                                I'm struggling with this differential equation. I need a step-by-step solution to understand the process. I've tried using an integrating factor but got stuck halfway through.
+                                                            </p>
+                                                            <div class="mt-2">
+                                                                <img src="https://via.placeholder.com/300x100" alt="Problem Image" class="rounded-md">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4 flex">
+                                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                                        Answer Question
+                                                    </button>
+                                                    <button class="ml-3 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium">
+                                                        Skip
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="px-4 py-4 sm:px-6">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex-1">
+                                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                            Explain the working principle of a CMOS inverter
+                                                        </h3>
+                                                        <div class="mt-2 flex justify-between sm:flex sm:justify-start">
+                                                            <div class="sm:flex">
+                                                                <p class="flex items-center text-sm text-gray-500">
+                                                                    <i class="fas fa-user-circle mr-1.5 text-gray-400"></i>
+                                                                    Sarah Johnson
+                                                                </p>
+                                                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                                    <i class="fas fa-tag mr-1.5 text-gray-400"></i>
+                                                                    Electronics
+                                                                </p>
+                                                                <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                                    <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                                                                    Posted 5 hours ago
+                                                                </p>
+                                                            </div>
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                                Waiting for answer
+                                                            </span>
+                                                        </div>
+                                                        <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                                                            <p class="text-sm text-gray-700">
+                                                                I need a detailed explanation of CMOS inverter working principle including the operation in different regions. Please include voltage transfer characteristics and noise margin concepts.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4 flex">
+                                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                                        Answer Question
+                                                    </button>
+                                                    <button class="ml-3 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium">
+                                                        Skip
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Answer Interface -->
+                            <div class="mt-8">
+                                <div class="bg-white shadow sm:rounded-lg">
+                                    <div class="px-4 py-5 sm:p-6">
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                            Answer the Question
+                                        </h3>
+                                        <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                                            <p class="text-sm font-medium text-gray-700">
+                                                Question: How to solve this differential equation: dy/dx + 2y = x^2e^(-2x)?
+                                            </p>
+                                            <p class="mt-2 text-sm text-gray-500">
+                                                From: Michael Smith
+                                            </p>
+                                        </div>
+                                        <div class="mt-5">
+                                            <div class="answer-toolbar rounded-t-md bg-gray-100 border border-gray-300 p-2 flex space-x-2 overflow-x-auto">
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-bold"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-italic"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-underline"></i>
+                                                </button>
+                                                <span class="border-r border-gray-300"></span>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-list-ul"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-list-ol"></i>
+                                                </button>
+                                                <span class="border-r border-gray-300"></span>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-square-root-alt"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-superscript"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-subscript"></i>
+                                                </button>
+                                                <span class="border-r border-gray-300"></span>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-image"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-video"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-paperclip"></i>
+                                                </button>
+                                                <span class="border-r border-gray-300"></span>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-code"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-calculator"></i>
+                                                </button>
+                                                <button class="p-2 rounded hover:bg-white">
+                                                    <i class="fas fa-pencil-ruler"></i>
+                                                </button>
+                                            </div>
+                                            <textarea rows="8" class="block w-full rounded-b-md focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 border-t-0" placeholder="Write your detailed answer here...">To solve the differential equation dy/dx + 2y = x^2e^(-2x), we'll use the integrating factor method.
+
+Step 1: Identify the standard form. This equation is already in the standard form dy/dx + P(x)y = Q(x), where P(x) = 2 and Q(x) = x^2e^(-2x).
+
+Step 2: Find the integrating factor μ(x) = e^(∫P(x)dx) = e^(∫2dx) = e^(2x).
+
+Step 3: Multiply both sides of the original equation by the integrating factor:
+e^(2x) * (dy/dx + 2y) = e^(2x) * x^2e^(-2x)
+e^(2x) * dy/dx + 2e^(2x) * y = x^2
+
+Step 4: Recognize that the left side equals d/dx(e^(2x) * y):
+d/dx(e^(2x) * y) = x^2
+
+Step 5: Integrate both sides:
+e^(2x) * y = ∫x^2 dx = x^3/3 + C
+
+Step 6: Solve for y:
+y = e^(-2x) * (x^3/3 + C)
+
+Therefore, the general solution is y = (x^3/3 + C)e^(-2x), where C is the constant of integration.</textarea>
+                                            <div class="mt-4">
+                                                <label class="block text-sm font-medium text-gray-700">Add Attachments</label>
+                                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                                    <div class="space-y-1 text-center">
+                                                        <i class="fas fa-cloud-upload-alt mx-auto text-gray-400 text-2xl"></i>
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <label for="tutor-file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                <span>Upload files</span>
+                                                                <input id="tutor-file-upload" name="tutor-file-upload" type="file" class="sr-only">
+                                                            </label>
+                                                            <p class="pl-1">or drag and drop</p>
+                                                        </div>
+                                                        <p class="text-xs text-gray-500">
+                                                            PNG, JPG, PDF up to 10MB
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 flex">
+                                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                                    Submit Answer
+                                                </button>
+                                                <button class="ml-3 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium">
+                                                    Save Draft
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="student-dashboard-page" class="page">
+        <div class="min-h-screen bg-gray-100">
+            <div class="flex">
+                <!-- Sidebar -->
+                <div class="w-64 bg-blue-800 text-white min-h-screen">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xl">Student Panel</span>
+                            <button class="md:hidden text-white focus:outline-none">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="mt-8 flex flex-col space-y-1">
+                            <a href="#student-dashboard" class="flex items-center py-2 px-4 bg-blue-900 rounded">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#student-questions" class="flex items-center py-2 px-4 hover:bg-blue-700 rounded">
+                                <i class="fas fa-question-circle mr-3"></i>
+                                <span>My Questions</span>
+                            </a>
+                            <a href="#student-ask" class="flex items-center py-2 px-4 hover:bg-blue-700 rounded">
+                                <i class="fas fa-plus-circle mr-3"></i>
+                                <span>Ask Question</span>
+                            </a>
+                            <a href="#student-materials" class="flex items-center py-2 px-4 hover:bg-blue-700 rounded">
+                                <i class="fas fa-book mr-3"></i>
+                                <span>Study Materials</span>
+                            </a>
+                            <a href="#student-progress" class="flex items-center py-2 px-4 hover:bg-blue-700 rounded">
+                                <i class="fas fa-chart-line mr-3"></i>
+                                <span>My Progress</span>
+                            </a>
+                            <a href="#student-profile" class="flex items-center py-2 px-4 hover:bg-blue-700 rounded">
+                                <i class="fas fa-user mr-3"></i>
+                                <span>Profile</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1 overflow-auto">
+                    <div class="bg-white shadow">
+                        <div class="px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <h1 class="text-2xl font-semibold text-gray-900">Student Dashboard</h1>
+                            <div class="flex items-center">
+                                <div class="relative">
+                                    <button class="flex items-center text-gray-500 mr-4">
+                                        <i class="fas fa-bell text-xl"></i>
+                                        <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">2</span>
+                                    </button>
+                                </div>
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="Profile" class="h-8 w-8 rounded-full mr-2">
+                                    <span class="text-gray-900">Michael Smith</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="py-6">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <!-- Overview Cards -->
+                            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                                <i class="fas fa-question-circle text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Questions Asked
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            23
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                                <i class="fas fa-check-circle text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Answered Questions
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            21
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                                <i class="fas fa-clock text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Pending Questions
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            2
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden shadow rounded-lg">
+                                    <div class="p-5">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                                <i class="fas fa-file-pdf text-white text-xl"></i>
+                                            </div>
+                                            <div class="ml-5 w-0 flex-1">
+                                                <dl>
+                                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                                        Saved Materials
+                                                    </dt>
+                                                    <dd>
+                                                        <div class="text-lg font-medium text-gray-900">
+                                                            15
+                                                        </div>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 px-5 py-3">
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                                View all
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ask Question Form -->
+                            <div class="mt-8">
+                                <div class="bg-white shadow sm:rounded-lg">
+                                    <div class="px-4 py-5 sm:p-6">
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                            Ask a New Question
+                                        </h3>
+                                        <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                            <p>
+                                                Get help from our expert tutors by submitting your question below.
+                                            </p>
+                                        </div>
+                                        <form class="mt-5">
+                                            <div>
+                                                <label for="question-title" class="block text-sm font-medium text-gray-700">Question Title</label>
+                                                <input type="text" name="question-title" id="question-title" class="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" placeholder="e.g., How to solve this differential equation?">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="question-subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                                                <select id="question-subject" name="question-subject" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    <option>Mathematics</option>
+                                                    <option>Physics</option>
+                                                    <option>Electronics</option>
+                                                    <option>Programming</option>
+                                                    <option>Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="question-details" class="block text-sm font-medium text-gray-700">Question Details</label>
+                                                <textarea id="question-details" name="question-details" rows="4" class="mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" placeholder="Describe your question in detail..."></textarea>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label class="block text-sm font-medium text-gray-700">Attachments</label>
+                                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                                    <div class="space-y-1 text-center">
+                                                        <i class="fas fa-cloud-upload-alt mx-auto text-gray-400 text-2xl"></i>
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <label for="student-file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                <span>Upload files</span>
+                                                                <input id="student-file-upload" name="student-file-upload" type="file" class="sr-only">
+                                                            </label>
+                                                            <p class="pl-1">or drag and drop</p>
+                                                        </div>
+                                                        <p class="text-xs text-gray-500">
+                                                            PNG, JPG, PDF up to 10MB
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4">
+                                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                    <i class="fas fa-paper-plane mr-2"></i>
+                                                    Submit Question
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Answers -->
+                            <div class="mt-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-900">Recent Answers</h2>
+                                    <button class="text-blue-600 hover:text-blue-500 text-sm font-medium">
+                                        View All Answers
+                                    </button>
+                                </div>
+                                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                                    <div class="px-4 py-5 sm:p-6">
+                                        <div class="border-b border-gray-200 pb-5">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                        How to solve this differential equation: dy/dx + 2y = x^2e^(-2x)?
+                                                    </h3>
+                                                    <p class="mt-1 text-sm text-gray-500">
+                                                        Asked 2 days ago
+                                                    </p>
+                                                </div>
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Answered
+                                                </span>
+                                            </div>
+                                            <div class="mt-4 flex items-center">
+                                                <div class="flex-shrink-0">
+                                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        Dr. Jane Cooper
+                                                    </div>
+                                                    <div class="text-sm text-gray-500">
+                                                        Answered 1 day ago
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                                                <p class="text-sm text-gray-700">
+                                                    To solve the differential equation dy/dx + 2y = x^2e^(-2x), we'll use the integrating factor method.
+                                                </p>
+                                                <p class="mt-2 text-sm text-gray-700">
+                                                    Step 1: Identify the standard form. This equation is already in the standard form dy/dx + P(x)y = Q(x), where P(x) = 2 and Q(x) = x^2e^(-2x).
+                                                </p>
+                                                <p class="mt-2 text-sm text-gray-700">
+                                                    Step 2: Find the integrating factor μ(x) = e^(∫P(x)dx) = e^(∫2dx) = e^(2x).
+                                                </p>
+                                                <div class="mt-2">
+                                                    <p class="text-sm text-gray-700">
+                                                        Step 3: Multiply both sides by the integrating factor:
+                                                    </p>
+                                                    <p class="text-sm text-gray-700">
+                                                        e^(2x) * (dy/dx + 2y) = e^(2x) * x^2e^(-2x)
+                                                        <br>
+                                                        e^(2x) * dy/dx + 2e^(2x) * y = x^2
+                                                    </p>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <p class="text-sm text-gray-700">
+                                                        Step 4: Recognize that the left side equals d/dx(e^(2x) * y):
+                                                        <br>
+                                                        d/dx(e^(2x) * y) = x^2
+                                                    </p>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <p class="text-sm text-gray-700">
+                                                        Step 5: Integrate both sides:
+                                                        <br>
+                                                        e^(2x) * y = ∫x^2 dx = x^3/3 + C
+                                                    </p>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <p class="text-sm text-gray-700">
+                                                        Step 6: Solve for y:
+                                                        <br>
+                                                        y = e^(-2x) * (x^3/3 + C)
+                                                    </p>
+                                                </div>
+                                                <p class="mt-2 text-sm font-medium text-gray-700">
+                                                    Therefore, the general solution is y = (x^3/3 + C)e^(-2x), where C is the constant of integration.
+                                                </p>
+                                            </div>
+                                            <div class="mt-4 flex items-center space-x-4">
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-thumbs-up mr-1"></i> Helpful (5)
+                                                </button>
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-comment mr-1"></i> Comment
+                                                </button>
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-share mr-1"></i> Share
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-5">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                        What is the time complexity of quicksort algorithm?
+                                                    </h3>
+                                                    <p class="mt-1 text-sm text-gray-500">
+                                                        Asked 3 days ago
+                                                    </p>
+                                                </div>
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Answered
+                                                </span>
+                                            </div>
+                                            <div class="mt-4 flex items-center">
+                                                <div class="flex-shrink-0">
+                                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        Robert Johnson
+                                                    </div>
+                                                    <div class="text-sm text-gray-500">
+                                                        Answered 2 days ago
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                                                <p class="text-sm text-gray-700">
+                                                    The time complexity of the quicksort algorithm varies depending on the scenario:
+                                                </p>
+                                                <ul class="mt-2 list-disc list-inside text-sm text-gray-700 space-y-1">
+                                                    <li><strong>Best case:</strong> O(n log n) - This occurs when the pivot chosen divides the array into roughly equal halves each time.</li>
+                                                    <li><strong>Average case:</strong> O(n log n) - This is the expected performance in typical scenarios with random data.</li>
+                                                    <li><strong>Worst case:</strong> O(n²) - This happens when the pivot chosen is consistently the smallest or largest element, resulting in highly unbalanced partitions.</li>
+                                                </ul>
+                                                <p class="mt-2 text-sm text-gray-700">
+                                                    The space complexity is O(log n) for the recursive call stack in the best case, but can be O(n) in the worst case.
+                                                </p>
+                                                <p class="mt-2 text-sm text-gray-700">
+                                                    Despite the O(n²) worst-case scenario, quicksort is often faster in practice than other O(n log n) sorting algorithms like merge sort due to its cache efficiency and lower constant factors.
+                                                </p>
+                                            </div>
+                                            <div class="mt-4 flex items-center space-x-4">
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-thumbs-up mr-1"></i> Helpful (3)
+                                                </button>
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-comment mr-1"></i> Comment
+                                                </button>
+                                                <button class="text-gray-400 hover:text-gray-500">
+                                                    <i class="fas fa-share mr-1"></i> Share
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation
+        function changePage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active-page');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.add('active-page');
+        }
+
+        // Toggle between login and register forms
+        function toggleAuthMode() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const authTitle = document.getElementById('auth-title');
+            const authSubtitle = document.getElementById('auth-subtitle');
+            
+            if (loginForm.classList.contains('hidden')) {
+                // Switch to login
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                authTitle.textContent = 'Sign in to your account';
+                authSubtitle.innerHTML = 'Or <button onclick="toggleAuthMode()" class="font-medium text-indigo-600 hover:text-indigo-500">create a new account</button>';
+            } else {
+                // Switch to register
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                authTitle.textContent = 'Create your account';
+                authSubtitle.innerHTML = 'Or <button onclick="toggleAuthMode()" class="font-medium text-indigo-600 hover:text-indigo-500">sign in to your existing account</button>';
+            }
+        }
+
+        // Simulate login
+        function simulateLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                if (email.includes('admin')) {
+                    changePage('admin-dashboard');
+                } else if (email.includes('tutor')) {
+                    changePage('tutor-dashboard');
+                } else {
+                    changePage('student-dashboard');
+                }
+            } else {
+                alert('Please enter both email and password');
+            }
+        }
+
+        // Simulate register
+        function simulateRegister() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const userType = document.getElementById('user-type').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (name && email && password && confirmPassword && terms) {
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                
+                if (userType === 'tutor') {
+                    changePage('tutor-dashboard');
+                } else {
+                    changePage('student-dashboard');
+                }
+            } else {
+                alert('Please fill in all required fields and accept the terms');
+            }
+        }
+    </script>
+</body>
+</html>
